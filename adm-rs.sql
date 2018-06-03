@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 14 Mar 2018 pada 20.41
--- Versi Server: 10.1.25-MariaDB
--- PHP Version: 5.6.31
+-- Generation Time: Jun 03, 2018 at 04:42 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `adm-gentellela`
+-- Database: `adm-rs`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `apps`
+-- Table structure for table `apps`
 --
 
 CREATE TABLE `apps` (
@@ -40,7 +38,7 @@ CREATE TABLE `apps` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
--- Dumping data untuk tabel `apps`
+-- Dumping data for table `apps`
 --
 
 INSERT INTO `apps` (`id`, `app_name`, `app_company`, `app_logo`, `app_logo_lg`, `app_logo_mini`, `app_theme`, `updated_at`) VALUES
@@ -49,7 +47,58 @@ INSERT INTO `apps` (`id`, `app_name`, `app_company`, `app_logo`, `app_logo_lg`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `logs`
+-- Table structure for table `foto_rumah_sakit`
+--
+
+CREATE TABLE `foto_rumah_sakit` (
+  `id` int(3) NOT NULL,
+  `rumah_sakit_id` int(3) NOT NULL,
+  `foto` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jadwal_rumah_sakit`
+--
+
+CREATE TABLE `jadwal_rumah_sakit` (
+  `id` int(3) NOT NULL,
+  `rumah_sakit_id` int(3) NOT NULL,
+  `hari` varchar(15) NOT NULL,
+  `jam_mulai` varchar(25) DEFAULT NULL,
+  `jam_selesai` varchar(25) DEFAULT NULL,
+  `operational` varchar(25) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jenis_rumah_sakit`
+--
+
+CREATE TABLE `jenis_rumah_sakit` (
+  `id` int(3) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jenis_rumah_sakit`
+--
+
+INSERT INTO `jenis_rumah_sakit` (`id`, `description`, `created_at`, `update_at`) VALUES
+(1, 'Rumah Sakit Ibu dan Anak', '2018-05-19 14:08:38', '2018-05-19 14:08:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs`
 --
 
 CREATE TABLE `logs` (
@@ -62,7 +111,7 @@ CREATE TABLE `logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `logs`
+-- Dumping data for table `logs`
 --
 
 INSERT INTO `logs` (`id`, `log`, `activity`, `user_id`, `created_by`, `created_at`) VALUES
@@ -100,17 +149,19 @@ INSERT INTO `logs` (`id`, `log`, `activity`, `user_id`, `created_by`, `created_a
 (38, '/privileges_user/update_priv/36', '{\"priv_update\":\"1\"}', 1, 'admin', '2018-01-31 08:03:24'),
 (39, '/privileges_user/update_priv/36', '{\"priv_delete\":\"1\"}', 1, 'admin', '2018-01-31 08:03:25'),
 (40, '/privileges_user/update_priv/36', '{\"priv_create\":\"1\"}', 1, 'admin', '2018-01-31 08:03:27'),
-(41, '/privileges_user/update_priv/10', '{\"priv_create\":\"0\"}', 1, 'admin', '2018-02-22 18:22:33'),
-(42, '/privileges_user/update_priv/10', '{\"priv_read\":\"0\"}', 1, 'admin', '2018-02-22 18:22:39'),
-(43, '/privileges_user/update_priv/10', '{\"priv_create\":\"1\"}', 1, 'admin', '2018-02-22 18:22:48'),
-(44, '/privileges_user/update_priv/10', '{\"priv_read\":\"1\"}', 1, 'admin', '2018-02-22 18:22:49'),
-(45, '/group_user/add', '{\"role\":\"test\",\"created_at\":\"2018-02-22 18:23:22\",\"0\":{\"role_id\":3,\"menu_id\":\"23\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"},\"1\":{\"role_id\":3,\"menu_id\":\"22\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"},\"2\":{\"role_id\":3,\"menu_id\":\"21\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"},\"3\":{\"role_id\":3,\"menu_id\":\"20\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"},\"4\":{\"role_id\":3,\"menu_id\":\"9\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"},\"5\":{\"role_id\":3,\"menu_id\":\"8\",\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-02-22 18:23:22\"}}', 1, 'admin', '2018-02-22 18:23:23'),
-(46, '/group_user/delete/3', '{\"id\":\"3\",\"role\":\"test\",\"created_at\":\"2018-02-22 18:23:22\",\"updated_at\":null}', 1, 'admin', '2018-03-14 20:38:29');
+(41, '/privileges_user/update_priv/35', '{\"priv_read\":\"1\"}', 1, 'admin', '2018-04-07 07:18:12'),
+(42, '/privileges_user/update_priv/9', '{\"priv_read\":\"0\"}', 1, 'admin', '2018-04-07 07:18:16'),
+(43, '/list_menus/update/21', '{\"menu\":\"Data Users\",\"parent\":\"0\",\"link\":\"users\",\"is_published\":1,\"menu_order\":\"100\",\"level\":0,\"icon\":\"fa-users\"}', 1, 'admin', '2018-05-19 06:00:27'),
+(44, '/list_menus/add', '{\"menu\":\"Master\",\"parent\":\"0\",\"link\":\"\",\"is_published\":1,\"menu_order\":\"200\",\"created_at\":\"2018-05-19 06:01:41\",\"level\":0,\"icon\":\"fa-plus-square-o\",\"0\":{\"role_id\":\"2\",\"menu_id\":24,\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-05-19 06:01:41\"},\"1\":{\"role_id\":\"1\",\"menu_id\":24,\"priv_create\":1,\"priv_read\":1,\"priv_update\":1,\"priv_delete\":1,\"created_at\":\"2018-05-19 06:01:41\"}}', 1, 'admin', '2018-05-19 06:01:41'),
+(45, '/list_menus/add', '{\"menu\":\"Rumah Sakit\",\"parent\":\"24\",\"link\":\"rumah_sakit\",\"is_published\":1,\"menu_order\":\"210\",\"created_at\":\"2018-05-19 06:02:19\",\"level\":1,\"icon\":null,\"0\":{\"role_id\":\"2\",\"menu_id\":25,\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-05-19 06:02:19\"},\"1\":{\"role_id\":\"1\",\"menu_id\":25,\"priv_create\":1,\"priv_read\":1,\"priv_update\":1,\"priv_delete\":1,\"created_at\":\"2018-05-19 06:02:19\"}}', 1, 'admin', '2018-05-19 06:02:19'),
+(46, '/list_menus/add', '{\"menu\":\"Jenis Rumah Sakit\",\"parent\":\"24\",\"link\":\"jenis_rumah_sakit\",\"is_published\":1,\"menu_order\":\"202\",\"created_at\":\"2018-05-19 06:05:16\",\"level\":1,\"icon\":null,\"0\":{\"role_id\":\"2\",\"menu_id\":26,\"priv_create\":0,\"priv_read\":0,\"priv_update\":0,\"priv_delete\":0,\"created_at\":\"2018-05-19 06:05:16\"},\"1\":{\"role_id\":\"1\",\"menu_id\":26,\"priv_create\":1,\"priv_read\":1,\"priv_update\":1,\"priv_delete\":1,\"created_at\":\"2018-05-19 06:05:16\"}}', 1, 'admin', '2018-05-19 06:05:16'),
+(47, '/list_menus/update/26', '{\"menu\":\"Jenis Rumah Sakit\",\"parent\":\"24\",\"link\":\"jenis_rumah_sakit\",\"is_published\":1,\"menu_order\":\"220\",\"level\":1,\"icon\":null}', 1, 'admin', '2018-05-19 06:05:37'),
+(48, '/list_menus/update/24', '{\"menu\":\"Master\",\"parent\":\"0\",\"link\":\"\",\"is_published\":1,\"menu_order\":\"200\",\"level\":0,\"icon\":\"fa-dot-circle-o\"}', 1, 'admin', '2018-05-19 07:32:17');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `menus`
+-- Table structure for table `menus`
 --
 
 CREATE TABLE `menus` (
@@ -127,21 +178,24 @@ CREATE TABLE `menus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
--- Dumping data untuk tabel `menus`
+-- Dumping data for table `menus`
 --
 
 INSERT INTO `menus` (`id`, `level`, `parent`, `menu`, `link`, `is_published`, `menu_order`, `icon`, `created_at`, `updated_at`) VALUES
 (8, 0, 0, 'Settings', '', 1, 1300, 'fa-gear', '2017-12-21 05:46:14', '2018-01-15 14:55:03'),
 (9, 1, 8, 'Menu', 'list_menus', 1, 1320, NULL, '2017-12-21 05:47:19', '2018-01-15 14:55:06'),
 (20, 1, 8, 'User', '', 1, 1310, NULL, '2017-12-23 07:23:25', '2018-01-15 14:55:10'),
-(21, 2, 20, 'List User', 'users', 1, 1311, NULL, '2017-12-23 07:24:31', '2018-01-15 14:55:14'),
+(21, 0, 0, 'Data Users', 'users', 1, 100, 'fa-users', '2017-12-23 07:24:31', '2018-05-19 11:00:27'),
 (22, 2, 20, 'Group User', 'group_user', 1, 1312, NULL, '2017-12-23 07:25:25', '2018-01-15 14:55:17'),
-(23, 2, 20, 'Privileges User', 'privileges_user', 1, 1313, NULL, '2017-12-23 11:03:14', '2018-01-15 14:55:20');
+(23, 2, 20, 'Privileges User', 'privileges_user', 1, 1313, NULL, '2017-12-23 11:03:14', '2018-01-15 14:55:20'),
+(24, 0, 0, 'Master', '', 1, 200, 'fa-dot-circle-o', '2018-05-19 06:01:41', '2018-05-19 12:32:17'),
+(25, 1, 24, 'Rumah Sakit', 'rumah_sakit', 1, 210, NULL, '2018-05-19 06:02:19', NULL),
+(26, 1, 24, 'Jenis Rumah Sakit', 'jenis_rumah_sakit', 1, 220, NULL, '2018-05-19 06:05:16', '2018-05-19 11:05:37');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profiles`
+-- Table structure for table `profiles`
 --
 
 CREATE TABLE `profiles` (
@@ -150,23 +204,25 @@ CREATE TABLE `profiles` (
   `fullname` varchar(32) NOT NULL,
   `address` text NOT NULL,
   `phone` varchar(16) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `gender` int(1) NOT NULL COMMENT '1.male 2.female',
+  `photo` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `profiles`
+-- Dumping data for table `profiles`
 --
 
-INSERT INTO `profiles` (`id`, `user_id`, `fullname`, `address`, `phone`, `gender`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Admin', 'Indonesia', '218489878', 2, '2018-01-23 02:29:56', '2018-01-23 08:29:56'),
-(2, 2, 'Ahmad Djunaedi', 'Bekasi, Jati Asih', '988833', 1, '2018-01-23 02:26:10', '2018-01-23 08:26:10');
+INSERT INTO `profiles` (`id`, `user_id`, `fullname`, `address`, `phone`, `email`, `gender`, `photo`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Admin', 'Indonesia', '218489878', '', 2, NULL, '2018-01-23 02:29:56', '2018-05-19 16:32:08'),
+(2, 2, 'Ahmad Djunaedi', 'Bekasi, Jati Asih', '988833', '', 1, 'isyana.jpg', '2018-01-23 02:26:10', '2018-05-19 16:33:57');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `roles`
+-- Table structure for table `roles`
 --
 
 CREATE TABLE `roles` (
@@ -177,7 +233,7 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `roles`
+-- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`id`, `role`, `created_at`, `updated_at`) VALUES
@@ -187,7 +243,34 @@ INSERT INTO `roles` (`id`, `role`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `rumah_sakit`
+--
+
+CREATE TABLE `rumah_sakit` (
+  `id` int(3) NOT NULL,
+  `jenis_rumah_sakit_id` int(3) NOT NULL,
+  `nama_rumah_sakit` varchar(50) NOT NULL,
+  `alamat` text NOT NULL,
+  `lat` varchar(25) NOT NULL,
+  `lng` varchar(25) NOT NULL,
+  `no_telp` varchar(15) DEFAULT NULL,
+  `no_fax` varchar(15) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rumah_sakit`
+--
+
+INSERT INTO `rumah_sakit` (`id`, `jenis_rumah_sakit_id`, `nama_rumah_sakit`, `alamat`, `lat`, `lng`, `no_telp`, `no_fax`, `email`, `created_at`, `update_at`) VALUES
+(1, 1, 'Rumah Sakit Pondok Indah', 'Pondok Indah, Jakarta Selatan DKI JAKARTA', '', '', NULL, NULL, NULL, '2018-05-21 00:00:00', '2018-05-26 13:47:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -195,23 +278,24 @@ CREATE TABLE `users` (
   `role_id` int(11) NOT NULL,
   `username` varchar(64) NOT NULL,
   `password` varchar(60) NOT NULL,
+  `device_token` varchar(255) DEFAULT NULL,
   `last_login` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `role_id`, `username`, `password`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 1, 'admin', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', '2018-03-14 20:38:13', '2017-12-11 04:57:04', '2018-03-14 20:38:13'),
-(2, 2, 'user', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', '2018-03-14 20:40:46', '2017-12-24 11:55:52', '2018-03-14 20:40:46');
+INSERT INTO `users` (`id`, `role_id`, `username`, `password`, `device_token`, `last_login`, `created_at`, `updated_at`) VALUES
+(1, 1, 'admin', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', NULL, '2018-06-03 11:22:04', '2017-12-11 04:57:04', '2018-06-03 16:22:04'),
+(2, 2, 'djuned92', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', NULL, '2018-04-07 07:18:40', '2017-12-24 11:55:52', '2018-04-07 12:18:40');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user_privileges`
+-- Table structure for table `user_privileges`
 --
 
 CREATE TABLE `user_privileges` (
@@ -227,22 +311,28 @@ CREATE TABLE `user_privileges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `user_privileges`
+-- Dumping data for table `user_privileges`
 --
 
 INSERT INTO `user_privileges` (`id`, `role_id`, `menu_id`, `priv_create`, `priv_read`, `priv_update`, `priv_delete`, `created_at`, `updated_at`) VALUES
 (7, 2, 8, 0, 1, 0, 0, '2017-12-21 05:46:14', '2017-12-24 17:53:51'),
 (8, 1, 8, 1, 1, 1, 1, '2017-12-21 05:46:14', NULL),
-(9, 2, 9, 0, 1, 0, 0, '2017-12-21 05:47:19', '2018-01-31 13:50:19'),
-(10, 1, 9, 1, 1, 1, 1, '2017-12-21 05:47:19', '2018-02-22 18:22:49'),
+(9, 2, 9, 0, 0, 0, 0, '2017-12-21 05:47:19', '2018-04-07 12:18:16'),
+(10, 1, 9, 1, 1, 1, 1, '2017-12-21 05:47:19', '2017-12-27 10:19:23'),
 (31, 2, 20, 0, 1, 0, 0, '2017-12-23 07:23:25', '2017-12-24 17:53:55'),
 (32, 1, 20, 1, 1, 1, 1, '2017-12-23 07:23:25', '2017-12-24 22:45:33'),
 (33, 2, 21, 1, 1, 0, 0, '2017-12-23 07:24:31', '2017-12-29 11:16:59'),
 (34, 1, 21, 1, 1, 1, 1, '2017-12-23 07:24:31', '2018-01-22 14:10:11'),
-(35, 2, 22, 0, 0, 0, 0, '2017-12-23 07:25:25', NULL),
+(35, 2, 22, 0, 1, 0, 0, '2017-12-23 07:25:25', '2018-04-07 12:18:12'),
 (36, 1, 22, 1, 1, 1, 1, '2017-12-23 07:25:25', '2018-01-31 14:03:26'),
 (43, 2, 23, 0, 0, 0, 0, '2017-12-23 11:03:14', NULL),
-(44, 1, 23, 1, 1, 1, 1, '2017-12-23 11:03:14', '2017-12-24 17:07:21');
+(44, 1, 23, 1, 1, 1, 1, '2017-12-23 11:03:14', '2017-12-24 17:07:21'),
+(45, 2, 24, 0, 0, 0, 0, '2018-05-19 06:01:41', NULL),
+(46, 1, 24, 1, 1, 1, 1, '2018-05-19 06:01:41', NULL),
+(47, 2, 25, 0, 0, 0, 0, '2018-05-19 06:02:19', NULL),
+(48, 1, 25, 1, 1, 1, 1, '2018-05-19 06:02:19', NULL),
+(49, 2, 26, 0, 0, 0, 0, '2018-05-19 06:05:16', NULL),
+(50, 1, 26, 1, 1, 1, 1, '2018-05-19 06:05:16', NULL);
 
 --
 -- Indexes for dumped tables
@@ -252,6 +342,18 @@ INSERT INTO `user_privileges` (`id`, `role_id`, `menu_id`, `priv_create`, `priv_
 -- Indexes for table `apps`
 --
 ALTER TABLE `apps`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `foto_rumah_sakit`
+--
+ALTER TABLE `foto_rumah_sakit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `jenis_rumah_sakit`
+--
+ALTER TABLE `jenis_rumah_sakit`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -279,6 +381,12 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rumah_sakit`
+--
+ALTER TABLE `rumah_sakit`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -297,15 +405,25 @@ ALTER TABLE `user_privileges`
 --
 
 --
+-- AUTO_INCREMENT for table `foto_rumah_sakit`
+--
+ALTER TABLE `foto_rumah_sakit`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `jenis_rumah_sakit`
+--
+ALTER TABLE `jenis_rumah_sakit`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `profiles`
 --
@@ -315,7 +433,12 @@ ALTER TABLE `profiles`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `rumah_sakit`
+--
+ALTER TABLE `rumah_sakit`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -325,8 +448,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_privileges`
 --
 ALTER TABLE `user_privileges`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;COMMIT;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
