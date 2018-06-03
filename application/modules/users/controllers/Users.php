@@ -29,7 +29,7 @@ class Users extends MX_Controller {
 		$this->form_validation->set_rules('phone', 'Phone', 'trim|required');
 		$this->form_validation->set_rules('gender', 'Gemder', 'trim|required');
 		if ($this->form_validation->run() == FALSE) {
-			$this->slice->view('f_users',$data);
+			$this->slice->view('f_users');
 		} else {
 			$this->db->trans_begin();
 		

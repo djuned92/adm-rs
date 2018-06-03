@@ -32,7 +32,7 @@ class Group_user extends MX_Controller {
 		$this->functions->check_access2($this->session->role_id, $this->uri->segment(1), $this->uri->segment(2));
 		$this->form_validation->set_rules('role', 'Roles', 'trim|required');
 		if ($this->form_validation->run() == FALSE) {
-			$this->slice->view('f_group_user', $data);
+			$this->slice->view('f_group_user');
 		} else {
 			$this->db->trans_begin();
 			
