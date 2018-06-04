@@ -73,33 +73,36 @@ class Rumah_sakit extends MX_Controller {
 
 			$count_foto = count(array_filter($_FILES['userfile']['name']));
 
-			for($i = 0; $i < $count_foto; $i++) {
-				// $_FILES['userfile']['name']     = $_FILES['userfile']['name'][$i];
-    //             $_FILES['userfile']['type']     = $_FILES['userfile']['type'][$i];
-    //             $_FILES['userfile']['tmp_name'] = $_FILES['userfile']['tmp_name'][$i];
-    //             $_FILES['userfile']['error']    = $_FILES['userfile']['error'][$i];
-    //             $_FILES['userfile']['size']     = $_FILES['userfile']['size'][$i];
+			// for($i = 0; $i < $count_foto; $i++) {
+			// 	// $_FILES['userfile']['name']     = $_FILES['userfile']['name'][$i];
+   //  //             $_FILES['userfile']['type']     = $_FILES['userfile']['type'][$i];
+   //  //             $_FILES['userfile']['tmp_name'] = $_FILES['userfile']['tmp_name'][$i];
+   //  //             $_FILES['userfile']['error']    = $_FILES['userfile']['error'][$i];
+   //  //             $_FILES['userfile']['size']     = $_FILES['userfile']['size'][$i];
 
 				$config['upload_path'] 		= './assets/images/rumah_sakit/';
 				$config['allowed_types'] 	= 'gif|jpg|png';
 				$config['max_size']      	= 1024 * 3;
 				$config['encrypt_name']		= TRUE;
 
-				$this->upload->initialize($config);
-				dd($this->upload->do_upload());
-				if($this->upload->do_upload()) {
-					$data_foto[] = [
-						'rumah_sakit_id'	=> $rumah_sakit_id,
-						'foto'				=> $this->upload->data('file_name')[$i],
-						'created_at'		=> date('Y-m-d H:i:s')
-					];
-				}				
+				// $data_foto = [];
+				foreach($_FILES['userfile']['name'] as $field) {
+					$this->upload->initialize($config);
+					// dd($this->upload->do_upload($value));
+					if($this->upload->do_upload($field)) {
+						$data_foto[] = [
+							'rumah_sakit_id'	=> $rumah_sakit_id,
+							'foto'				=> $this->upload->data('file_name'),
+							'created_at'		=> date('Y-m-d H:i:s')
+						];
+					}
+				}
 
 				// dd($_FILES);
 				// if(!empty($data_foto)) {
 				// 	$this->global->create('foto_rumah_sakit',$data_foto);
 				// }
-			}
+			// }
 			dd($data_foto);
 
 			$this->global->create_batch('foto_rumah_sakit',$data_foto);
