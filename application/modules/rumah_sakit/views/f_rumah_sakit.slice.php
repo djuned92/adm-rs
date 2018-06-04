@@ -127,6 +127,7 @@
                         <hr>
                         
                         <h4>Jadwal Rumah Sakit</h4>
+                       <!-- 
                         <?php 
                         	for($i = 0; $i < 7; $i++):
 	                        $hari = ($i == 0) ? 'Senin': (($i == 1) ? 'Selasa': 
@@ -149,7 +150,7 @@
 	                            </div>
 	                            
 	                            <div class="col-md-2 col-sm-2 col-xs-12">
-	                                <select style="width: 100%;" class="form-control" name="opreational[]" required>
+	                                <select style="width: 100%;" class="form-control" name="operational[]" required>
 	                                	<option value="">-- Operational --</option>
 	                                	<option value="12 Jam">12 Jam</option>
 	                                	<option value="24 Jam">24 Jam</option>
@@ -158,6 +159,7 @@
 	                            </div>
 	                        </div>
                     	<?php endfor ?>
+                         -->
 
                         <div class="ln_solid"></div>
                         <div class="form-group">

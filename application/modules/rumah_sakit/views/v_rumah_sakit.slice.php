@@ -92,7 +92,9 @@
                                     <?php else: ?>
                                         <ul>
                                             <?php foreach($value['jadwal'] as $k => $v): ?>
-                                                <li><?= $v['jam'] ?></li>
+                                                <li>Hari : <?= $v['hari']?> <br>
+                                                    Jam : <?= $v['jam_mulai'] ?> s.d. <?= $v['jam_selesai'] ?> <br>
+                                                    Operational : <?= $v['operational'] ?></li>
                                             <?php endforeach; ?>
                                         </ul>
                                     <?php endif ?>
