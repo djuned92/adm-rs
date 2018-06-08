@@ -105,9 +105,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Foto <span class="required">*</span></label>
+                            <label class="control-label col-md-2 col-sm-2 col-xs-12">Foto <?=($this->uri->segment(2) == 'add') ? '<span class="required">*</span>':'';?></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input type="file" class="form-control" name="userfile[]" multiple required>
+                                <input type="file" class="form-control" name="userfiles[]" multiple <?=($this->uri->segment(2) == 'add') ? 'required':'';?>>
                             </div>
                         </div>
 
@@ -127,7 +127,6 @@
                         <hr>
                         
                         <h4>Jadwal Rumah Sakit</h4>
-                       <!-- 
                         <?php 
                         	for($i = 0; $i < 7; $i++):
 	                        $hari = ($i == 0) ? 'Senin': (($i == 1) ? 'Selasa': 
@@ -142,24 +141,28 @@
 	                            </div>
 	                            
 	                            <div class="col-md-2 col-sm-2 col-xs-12">
-	                                <input type="text" name="jam_mulai[]" class="form-control" placeholder="Jam Mulai ..." required>
+	                                <input type="text" name="jam_mulai[]" class="form-control" placeholder="Jam Mulai ..."  
+                                    value="<?=isset($rumah_sakit['jadwal'][$i]['jam_mulai'])?$rumah_sakit['jadwal'][$i]['jam_mulai']:set_value('jam_mulai');?>" required>
 	                            </div>
 	                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="text-align:center;">s.d.</label>
 	                            <div class="col-md-2 col-sm-2 col-xs-12">
-	                                <input type="text" name="jam_selesai[]" class="form-control" placeholder="Jam Selesai ..." required>
+	                                <input type="text" name="jam_selesai[]" class="form-control" placeholder="Jam Selesai ..."  
+                                    value="<?=isset($rumah_sakit['jadwal'][$i]['jam_selesai'])?$rumah_sakit['jadwal'][$i]['jam_selesai']:set_value('jam_selesai');?>" required>
 	                            </div>
 	                            
 	                            <div class="col-md-2 col-sm-2 col-xs-12">
 	                                <select style="width: 100%;" class="form-control" name="operational[]" required>
 	                                	<option value="">-- Operational --</option>
-	                                	<option value="12 Jam">12 Jam</option>
-	                                	<option value="24 Jam">24 Jam</option>
-	                                	<option value="Libur">Libur</option>
+	                                	<option value="12 Jam" <?=isset($rumah_sakit['jadwal'][$i]['operational']) ? (($rumah_sakit['jadwal'][$i]['operational'] == '12 Jam') ? 
+                                            'selected':'') :'';?>>12 Jam</option>
+	                                	<option value="24 Jam" <?=isset($rumah_sakit['jadwal'][$i]['operational']) ? (($rumah_sakit['jadwal'][$i]['operational'] == '24 Jam') ? 
+                                            'selected':'') :'';?>>24 Jam</option>
+	                                	<option value="Libur" <?=isset($rumah_sakit['jadwal'][$i]['operational']) ? (($rumah_sakit['jadwal'][$i]['operational'] == 'Libur') ? 
+                                            'selected':'') :'';?>>Libur</option>
 	                                </select>
 	                            </div>
 	                        </div>
                     	<?php endfor ?>
-                         -->
 
                         <div class="ln_solid"></div>
                         <div class="form-group">
