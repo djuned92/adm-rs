@@ -18,18 +18,16 @@ class Api extends MX_Controller {
 		$username 	= $this->input->post('username');
 		$password 	= $this->input->post('password');
 		$device_token = $this->input->post('device_token');
-		$user 		= $this->global->getCond('users','*', ['username' => $username]);
+		$user 		= $this->global->getCond('users','*', ['username' => $username])->row_array();
 	
 		if(!empty($user)) {
 			if(password_verify($password, $user['password'])) {
-				// set session
-				$sess_data = [
+				$data_user = [
 					'logged_in' => TRUE,
 					'id'		=> $user['id'],
 					'username'	=> $user['username'],
 					'device_token' => $device_token,
 				];
-				$this->session->set_userdata($sess_data);
 
 				// update last login
 				$data['last_login'] = date('Y-m-d H:i:s');
@@ -38,7 +36,7 @@ class Api extends MX_Controller {
 
 				$response['code']  	= 200;
 				$response['error'] 	= FALSE;
-				$response['user']  	= $sess_data;
+				$response['user']  	= $data_user;
 			} else {
 				$response['code'] 	= 400;
 				$response['error'] 	= TRUE;
@@ -58,9 +56,9 @@ class Api extends MX_Controller {
 		$id 		= $this->input->post('id');
 		$username 	= $this->input->post('username');
 
-		$user = $this->global->getCond('users','*', ['username' => $username]);;
+		$user = $this->global->getCond('users','*', ['username' => $username])->row_array();
 		
-		if($id != NULL) {
+		if(!empty($id)) {
 			// update last login
 			$data['last_login'] 	= date('Y-m-d H:i:s');
 			$data['device_token'] 	= NULL;
@@ -93,7 +91,7 @@ class Api extends MX_Controller {
 			'created_at'=> date('Y-m-d H:i:s'),
 		];
 
-		$user_id = $this->global->add('users', $data, TRUE);
+		$user_id = $this->global->create('users', $data, TRUE);
 
 		$data_profile = [
 			'user_id'	=> $user_id,
@@ -105,7 +103,7 @@ class Api extends MX_Controller {
 			'created_at'=> date('Y-m-d H:i:s'),
 		];
 
-		$this->global->add('profiles', $data_profile);
+		$this->global->create('profiles', $data_profile);
 
 		if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -184,13 +182,13 @@ class Api extends MX_Controller {
 		$this->load->library('upload');
 
 		$config['upload_path'] 		= './assets/images/profiles/';
-		$config['allowed_types'] 	= 'gif|jpg|png';
+		$config['allowed_types'] 	= 'gif|jpg|png|jpeg';
 		$config['max_size']  		= 2048;
 		$config['encrypt_name'] 	= TRUE;
 
 		$this->upload->initialize($config);
 
-		if ( ! $this->upload->do_upload()){
+		if ( ! $this->upload->do_upload('userfile')) {
 			$error = array('error' => $this->upload->display_errors());
 			$response['error'] = $error;
 		} else {
@@ -219,6 +217,192 @@ class Api extends MX_Controller {
 	* ====================================================================
 	* END PROFILE
 	*/
+
+
+	/*
+	* RUMAH SAKIT
+	* ====================================================================
+	*/
+	private function check_null($item)
+	{
+		$data = [];
+		foreach ($item as $key => $value) {
+			$data[$key] = (empty($value) ? '-' : $value);
+		}
+
+		return $data;
+	}
+
+	public function get_rs()
+	{
+		$rumah_sakit 	= $this->global->getJoin('rumah_sakit','rumah_sakit.*, jenis_rumah_sakit.description',
+							['jenis_rumah_sakit'=>'rumah_sakit.jenis_rumah_sakit_id = jenis_rumah_sakit.id'])->result_array();
+		$jadwal 		= $this->global->get('jadwal_rumah_sakit','*',['id'=>'ASC']);
+		$image 			= $this->global->get('foto_rumah_sakit');
+
+		$data_rumah_sakit = [];
+		foreach ($rumah_sakit as $key => $value) {
+			if($jadwal->num_rows() > 0) {	
+				foreach ($jadwal->result_array() as $key2 => $value2) {
+					if($value['id'] == $value2['rumah_sakit_id']) {
+						$value['jadwal'][$key2] = $value2;
+					} else {
+						$value['jadwal'] = '-'; 
+					}	
+				}
+			} else {
+				$value['jadwal'] = '-'; 
+			}
+				
+			if($image->num_rows() > 0) {
+				foreach ($image->result_array() as $key3 => $value3) {
+					if($value['id'] == $value3['rumah_sakit_id']) {
+						$value['foto'][$key3] = base_url() . 'assets/images/rumah_sakit/' . $value3['foto'];
+					} else {
+						$value['foto'] =  base_url() . 'assets/images/no-image.png';
+					}
+				}
+			} else {
+				$value['foto'] =  base_url() . 'assets/images/no-image.png';
+			}	
+			
+			$data_rumah_sakit[$key]		= $this->check_null($value);
+		}
+
+		if(count($data_rumah_sakit) > 0) {
+			$response['code']		= 200;
+			$response['error']		= FALSE;
+			$response['rumah_sakit']= $data_rumah_sakit;
+		} else {
+			$response['code']		= 204;
+			$response['error']		= TRUE;
+			$response['message']	= 'No content rumah sakit!';			
+		}
+
+		echo json_encode($response);
+	}
+
+	public function get_rs_by_id($id)
+	{
+		$rumah_sakit 	= $this->global->getCondJoin('rumah_sakit','rumah_sakit.*, jenis_rumah_sakit.description',
+							['rumah_sakit.id'=> $id],
+							['jenis_rumah_sakit'=>'rumah_sakit.jenis_rumah_sakit_id = jenis_rumah_sakit.id'])->result_array();
+		$jadwal 		= $this->global->get('jadwal_rumah_sakit','*',['id'=>'ASC']);
+		$image 			= $this->global->get('foto_rumah_sakit');
+
+		$data_rumah_sakit = [];
+		foreach ($rumah_sakit as $key => $value) {
+			if($jadwal->num_rows() > 0) {	
+				foreach ($jadwal->result_array() as $key2 => $value2) {
+					if($value['id'] == $value2['rumah_sakit_id']) {
+						$value['jadwal'][$key2] = $value2;
+					} else {
+						$value['jadwal'] = '-'; 
+					}	
+				}
+			} else {
+				$value['jadwal'] = '-'; 
+			}
+				
+			if($image->num_rows() > 0) {
+				foreach ($image->result_array() as $key3 => $value3) {
+					if($value['id'] == $value3['rumah_sakit_id']) {
+						$value['foto'][$key3] = base_url() . 'assets/images/rumah_sakit/' . $value3['foto'];
+					} else {
+						$value['foto'] =  base_url() . 'assets/images/no-image.png';
+					}
+				}
+			} else {
+				$value['foto'] =  base_url() . 'assets/images/no-image.png';
+			}	
+			 
+			$data_rumah_sakit[$key]		= $this->check_null($value);
+		}
+
+		if(count($data_rumah_sakit) > 0) {
+			$response['code']		= 200;
+			$response['error']		= FALSE;
+			$response['rumah_sakit']= $data_rumah_sakit;
+		} else {
+			$response['code']		= 404;
+			$response['error']		= TRUE;
+			$response['message']	= 'Rumah sakit not found!';			
+		}
+
+		echo json_encode($response);	
+	}
+
+	public function get_rs_by_tipe($tipe)
+	{
+		$rumah_sakit 	= $this->global->getCondJoin('rumah_sakit','rumah_sakit.*, jenis_rumah_sakit.description',
+							['rumah_sakit.jenis_rumah_sakit_id'=> $tipe],
+							['jenis_rumah_sakit'=>'rumah_sakit.jenis_rumah_sakit_id = jenis_rumah_sakit.id'])->result_array();
+		$jadwal 		= $this->global->get('jadwal_rumah_sakit','*',['id'=>'ASC']);
+		$image 			= $this->global->get('foto_rumah_sakit');
+
+		$data_rumah_sakit = [];
+		foreach ($rumah_sakit as $key => $value) {
+			if($jadwal->num_rows() > 0) {	
+				foreach ($jadwal->result_array() as $key2 => $value2) {
+					if($value['id'] == $value2['rumah_sakit_id']) {
+						$value['jadwal'][$key2] = $value2;
+					} else {
+						$value['jadwal'] = '-'; 
+					}	
+				}
+			} else {
+				$value['jadwal'] = '-'; 
+			}
+				
+			if($image->num_rows() > 0) {
+				foreach ($image->result_array() as $key3 => $value3) {
+					if($value['id'] == $value3['rumah_sakit_id']) {
+						$value['foto'][$key3] = base_url() . 'assets/images/rumah_sakit/' . $value3['foto'];
+					} else {
+						$value['foto'] =  base_url() . 'assets/images/no-image.png';
+					}
+				}
+			} else {
+				$value['foto'] =  base_url() . 'assets/images/no-image.png';
+			}	
+			
+			$data_rumah_sakit[$key]		= $this->check_null($value);
+		}
+
+		if(count($data_rumah_sakit) > 0) {
+			$response['code']		= 200;
+			$response['error']		= FALSE;
+			$response['rumah_sakit']= $data_rumah_sakit;
+		} else {
+			$response['code']		= 404;
+			$response['error']		= TRUE;
+			$response['message']	= 'Rumah sakit not found!';			
+		}
+
+		echo json_encode($response);
+	}
+
+	public function get_jenis_rs()
+	{
+		$jenis_rs = $this->global->getCond('jenis_rumah_sakit');
+
+		if($jenis_rs->num_rows() > 0) {
+			$response['code']		= 200;
+			$response['error']		= FALSE;
+			$response['jenis_rumah_sakit']	= $jenis_rs->result_array();;
+		} else {
+			$response['code']		= 404;
+			$response['error']		= TRUE;
+			$response['message']	= 'No content jenis rumah sakit!';			
+		}
+
+		echo json_encode($response);
+	}
+	/*
+	* ====================================================================
+	* END RUMAH SAKIT
+	*/
+
 }
 
 /* End of file Api.php */

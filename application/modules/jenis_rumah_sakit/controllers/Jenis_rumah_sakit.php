@@ -14,7 +14,7 @@ class Jenis_rumah_sakit extends MX_Controller {
 		$this->functions->check_access($this->session->role_id, $this->uri->segment(1)); // access read
 		$data['priv']		= $this->functions->check_priv($this->session->role_id, $this->uri->segment(1)); // for button show and hide
 		
-		$data['jenis_rumah_sakit'] = $this->global->get('jenis_rumah_sakit')->result_array();
+		$data['jenis_rumah_sakit'] = $this->global->get('jenis_rumah_sakit','*',['id'=>'ASC'])->result_array();
 		$this->slice->view('v_jenis_rumah_sakit', $data);
 	}
 
