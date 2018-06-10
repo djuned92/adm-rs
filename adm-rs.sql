@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2018 at 04:42 PM
+-- Generation Time: Jun 10, 2018 at 05:54 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -58,6 +58,14 @@ CREATE TABLE `foto_rumah_sakit` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
+--
+-- Dumping data for table `foto_rumah_sakit`
+--
+
+INSERT INTO `foto_rumah_sakit` (`id`, `rumah_sakit_id`, `foto`, `created_at`, `updated_at`) VALUES
+(1, 2, '3a5c73fe43069014869e0ba2727aa7da.png', '2018-06-09 08:00:08', '2018-06-09 13:00:08'),
+(2, 2, '785eb9872f521314f9b2f83d8a899229.jpg', '2018-06-09 08:00:08', '2018-06-09 13:00:08');
+
 -- --------------------------------------------------------
 
 --
@@ -93,7 +101,8 @@ CREATE TABLE `jenis_rumah_sakit` (
 --
 
 INSERT INTO `jenis_rumah_sakit` (`id`, `description`, `created_at`, `update_at`) VALUES
-(1, 'Rumah Sakit Ibu dan Anak', '2018-05-19 14:08:38', '2018-05-19 14:08:38');
+(1, 'Rumah Sakit Ibu dan Anak', '2018-05-19 14:08:38', '2018-05-19 14:08:38'),
+(2, 'Rumah Sakit Umum', '2018-06-09 08:02:05', '2018-06-09 13:02:05');
 
 -- --------------------------------------------------------
 
@@ -204,7 +213,7 @@ CREATE TABLE `profiles` (
   `fullname` varchar(32) NOT NULL,
   `address` text NOT NULL,
   `phone` varchar(16) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `gender` int(1) NOT NULL COMMENT '1.male 2.female',
   `photo` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
@@ -217,7 +226,8 @@ CREATE TABLE `profiles` (
 
 INSERT INTO `profiles` (`id`, `user_id`, `fullname`, `address`, `phone`, `email`, `gender`, `photo`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Admin', 'Indonesia', '218489878', '', 2, NULL, '2018-01-23 02:29:56', '2018-05-19 16:32:08'),
-(2, 2, 'Ahmad Djunaedi', 'Bekasi, Jati Asih', '988833', '', 1, 'isyana.jpg', '2018-01-23 02:26:10', '2018-05-19 16:33:57');
+(2, 2, 'herdian murphy', 'kalibata', '0988', 'a@gmail.com', 2, 'c7f87a6eafc173f8781b3f236bc0f8a6.png', '2018-01-23 02:26:10', '2018-06-10 10:42:44'),
+(3, 3, 'user satu', 'Jakarta Barat', '08897766888', '', 1, NULL, '2018-06-10 05:14:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -265,7 +275,8 @@ CREATE TABLE `rumah_sakit` (
 --
 
 INSERT INTO `rumah_sakit` (`id`, `jenis_rumah_sakit_id`, `nama_rumah_sakit`, `alamat`, `lat`, `lng`, `no_telp`, `no_fax`, `email`, `created_at`, `update_at`) VALUES
-(1, 1, 'Rumah Sakit Pondok Indah', 'Pondok Indah, Jakarta Selatan DKI JAKARTA', '', '', NULL, NULL, NULL, '2018-05-21 00:00:00', '2018-05-26 13:47:46');
+(1, 1, 'Rumah Sakit Pondok Indah', 'Pondok Indah, Jakarta Selatan DKI JAKARTA', '-7.5848476', '110.91249620000008', '089693401875', NULL, NULL, '2018-05-21 00:00:00', '2018-06-09 14:43:23'),
+(2, 2, 'Rumah Sakit Ana Bekasi', 'Jaka Setia, Bekasi', '-6.2748853', '106.97657670000001', '089693401875', NULL, NULL, '2018-06-09 08:00:08', '2018-06-09 14:33:25');
 
 -- --------------------------------------------------------
 
@@ -289,8 +300,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role_id`, `username`, `password`, `device_token`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 1, 'admin', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', NULL, '2018-06-03 11:22:04', '2017-12-11 04:57:04', '2018-06-03 16:22:04'),
-(2, 2, 'djuned92', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', NULL, '2018-04-07 07:18:40', '2017-12-24 11:55:52', '2018-04-07 12:18:40');
+(1, 1, 'admin', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', NULL, '2018-06-09 10:18:00', '2017-12-11 04:57:04', '2018-06-09 15:18:00'),
+(2, 2, 'djuned92', '$2y$11$XBYAcNFBwa1e1dvc1zrUdOfBvvA1LQoWWVZNDW2kKyF7kqWU.iezG', 'dsadas', '2018-06-10 05:11:13', '2017-12-24 11:55:52', '2018-06-10 10:11:13'),
+(3, 2, 'user1', '$2y$11$D83E61yt1DtrNuWNMo.GTOvQt6aV2jwVR0So1ZjnMvOAW59zyHC.C', NULL, '0000-00-00 00:00:00', '2018-06-10 05:14:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -351,6 +363,12 @@ ALTER TABLE `foto_rumah_sakit`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `jadwal_rumah_sakit`
+--
+ALTER TABLE `jadwal_rumah_sakit`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `jenis_rumah_sakit`
 --
 ALTER TABLE `jenis_rumah_sakit`
@@ -408,12 +426,17 @@ ALTER TABLE `user_privileges`
 -- AUTO_INCREMENT for table `foto_rumah_sakit`
 --
 ALTER TABLE `foto_rumah_sakit`
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `jadwal_rumah_sakit`
+--
+ALTER TABLE `jadwal_rumah_sakit`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `jenis_rumah_sakit`
 --
 ALTER TABLE `jenis_rumah_sakit`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `logs`
 --
@@ -428,7 +451,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `profiles`
 --
 ALTER TABLE `profiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `roles`
 --
@@ -438,12 +461,12 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `rumah_sakit`
 --
 ALTER TABLE `rumah_sakit`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `user_privileges`
 --
